@@ -18,21 +18,22 @@ class App extends Component {
     };
   }
 
-  playerFindIndex = playerId => this.state.players.findIndex(player => player.id === playerId)
+  findPlayer = playerId => player => player.id === playerId
 
   increaseScore = (playerId) => {
     const { players } = this.state;
 
-    players[this.playerFindIndex(playerId)].score += 1;
+    players.find(this.findPlayer(playerId)).score += 1;
 
     this.setState({ players });
   }
 
   decreaseScore = (playerId) => {
     const { players } = this.state;
+    const selectedPlayer = players.find(this.findPlayer(playerId));
 
-    if (players[this.playerFindIndex(playerId)].score > 0) {
-      players[this.playerFindIndex(playerId)].score -= 1;
+    if (selectedPlayer.score > 0) {
+      selectedPlayer.score -= 1;
 
       this.setState({ players });
     }
