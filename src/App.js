@@ -1,21 +1,23 @@
 import React, { Component } from 'react';
+import { fromJS } from 'immutable';
+
 import PlayersList from './PlayersList';
 
 import logo from './logo.svg';
 import './App.css';
 
+const initialPlayers = fromJS([
+  { id: 1, name: 'Alan', score: 0 },
+  { id: 2, name: 'Bob', score: 0 },
+  { id: 3, name: 'Clyde', score: 0 },
+  { id: 4, name: 'Dan', score: 0 },
+]);
+
 class App extends Component {
   constructor() {
     super();
 
-    this.state = {
-      players: [
-        { id: 1, name: 'Alan', score: 0 },
-        { id: 2, name: 'Bob', score: 0 },
-        { id: 3, name: 'Clyde', score: 0 },
-        { id: 4, name: 'Dan', score: 0 },
-      ],
-    };
+    this.state = { players: initialPlayers.toJS() };
   }
 
   findPlayer = playerId => player => player.id === playerId
@@ -39,8 +41,25 @@ class App extends Component {
     }
   }
 
+  resetScore = (playerId) => {
+    const { players } = this.state;
+
+    players.find(this.findPlayer(playerId)).score = 0;
+
+    this.setState({ players });
+  }
+
+  resetAllScore = () => {
+    this.setState({ players: initialPlayers.toJS() });
+  }
+
   render() {
-    const { increaseScore, decreaseScore } = this;
+    const {
+      increaseScore,
+      decreaseScore,
+      resetScore,
+      resetAllScore,
+    } = this;
 
     return (
       <div className="App">
@@ -52,7 +71,12 @@ class App extends Component {
         <div className="App-intro">
           <PlayersList
             players={this.state.players}
-            handleScore={{ increaseScore, decreaseScore }}
+            handleScore={{
+              increaseScore,
+              decreaseScore,
+              resetScore,
+              resetAllScore,
+            }}
           />
         </div>
       </div>

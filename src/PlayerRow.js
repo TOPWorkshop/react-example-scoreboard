@@ -13,13 +13,15 @@ class PlayerRow extends Component {
     handleScore: PropTypes.shape({
       increaseScore: PropTypes.func,
       decreaseScore: PropTypes.func,
+      resetScore: PropTypes.func,
+      resetAllScore: PropTypes.func,
     }).isRequired,
   }
 
   render() {
     const {
       player: { id, name, score },
-      handleScore: { increaseScore, decreaseScore },
+      handleScore: { increaseScore, decreaseScore, resetScore },
     } = this.props;
 
     return (
@@ -27,8 +29,18 @@ class PlayerRow extends Component {
         <td>{name}</td>
         <td style={{ textAlign: 'center' }}>
           <Button onClick={() => decreaseScore(id)}>{'-'}</Button>
+
           <span style={{ margin: '0 10px' }}>{score}</span>
+
           <Button onClick={() => increaseScore(id)}>{'+'}</Button>
+
+          <Button
+            onClick={() => resetScore(id)}
+            bsStyle={'danger'}
+            style={{ float: 'right' }}
+          >
+            {'Reset'}
+          </Button>
         </td>
       </tr>
     );
