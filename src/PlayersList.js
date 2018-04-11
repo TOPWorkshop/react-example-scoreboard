@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
-import { Table, Button } from 'react-bootstrap';
+import PropTypes from 'prop-types';
+import { Table } from 'react-bootstrap';
 import styled from 'styled-components';
+
+import PlayerRow from './PlayerRow';
 
 const StyledTable = styled(Table)`
   max-width: 500px;
@@ -8,18 +11,22 @@ const StyledTable = styled(Table)`
 `;
 
 class PlayersList extends Component {
-  renderRow = ({ id, name, score }) => (
-    <tr key={id}>
-      <td>{name}</td>
-      <td style={{ textAlign: 'center' }}>
-        <Button>{'-'}</Button>
-        <label style={{ margin: '0 10px' }}>{score}</label>
-        <Button>{'+'}</Button>
-      </td>
-    </tr>
-  )
+  static propTypes = {
+    players: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number,
+      name: PropTypes.string,
+      score: PropTypes.number,
+    })).isRequired,
+
+    handleScore: PropTypes.shape({
+      increaseScore: PropTypes.func,
+      decreaseScore: PropTypes.func,
+    }).isRequired,
+  }
 
   render() {
+    const { players, handleScore } = this.props;
+
     return (
       <StyledTable striped bordered>
         <thead>
@@ -30,7 +37,13 @@ class PlayersList extends Component {
         </thead>
 
         <tbody>
-          {this.props.players.map(player => this.renderRow(player))}
+          {players.map(player => (
+            <PlayerRow
+              key={player.id}
+              player={player}
+              handleScore={handleScore}
+            />
+          ))}
         </tbody>
       </StyledTable>
     );
